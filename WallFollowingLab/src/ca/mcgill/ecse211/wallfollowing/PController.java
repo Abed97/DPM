@@ -49,10 +49,14 @@ public class PController implements UltrasonicController {
 
     // TODO: process a movement based on the us distance passed in (P style)
     
+    final int GAIN = 2;
     int dist_ERR = bandCenter - distance;
+    int cons = GAIN * dist_ERR;
     
+    //int new_LSPD = (GAIN * dist_ERR) + WallFollowingLab.leftMotor.getRotationSpeed();
+    //int new_RSPD = (GAIN * dist_ERR) + WallFollowingLab.rightMotor.getRotationSpeed();
     
-    if (dist_ERR == 0)
+    if (Math.abs(dist_ERR) <= bandWidth ) 
     {
     	WallFollowingLab.leftMotor.setSpeed(185);
     	WallFollowingLab.rightMotor.setSpeed(185);
@@ -60,6 +64,27 @@ public class PController implements UltrasonicController {
     	WallFollowingLab.rightMotor.forward();
     }
     
+    else if (dist_ERR > 0)
+    {
+    	// turning right
+    	WallFollowingLab.leftMotor.setSpeed(185 + cons);
+    	WallFollowingLab.rightMotor.setSpeed(185 - cons);
+    	WallFollowingLab.leftMotor.forward();
+    	WallFollowingLab.rightMotor.forward();
+    	
+    }
+    
+    else
+    {
+    	// turning left
+    	WallFollowingLab.leftMotor.setSpeed(185 + cons);
+    	WallFollowingLab.rightMotor.setSpeed(185 - cons);
+    	WallFollowingLab.leftMotor.forward();
+    	WallFollowingLab.rightMotor.forward();
+    }
+    
+    
+    /*
     else if (dist_ERR > 0)
     {
     	if (distance < 7)
@@ -90,7 +115,7 @@ public class PController implements UltrasonicController {
     
     
     
-    
+    */
   }
 
 

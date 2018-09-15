@@ -55,15 +55,15 @@ public class BangBangController implements UltrasonicController {
     	
     	if (distance < 7)
     	{
-    		WallFollowingLab.leftMotor.setSpeed(120);
-    		WallFollowingLab.rightMotor.setSpeed(175);
+    		WallFollowingLab.leftMotor.setSpeed(115);
+    		WallFollowingLab.rightMotor.setSpeed(140);
     		WallFollowingLab.leftMotor.backward();
     		WallFollowingLab.rightMotor.backward();
     	}
     	//right turn
     	else 
     	{
-    		WallFollowingLab.leftMotor.setSpeed(240);
+    		WallFollowingLab.leftMotor.setSpeed(210);
     		WallFollowingLab.rightMotor.setSpeed(20);
     		WallFollowingLab.leftMotor.forward();
     		WallFollowingLab.rightMotor.backward();
