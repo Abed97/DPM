@@ -49,73 +49,49 @@ public class PController implements UltrasonicController {
 
     // TODO: process a movement based on the us distance passed in (P style)
     
-    final int GAIN = 2;
+    final int GAIN = 6;
     int dist_ERR = bandCenter - distance;
-    int cons = GAIN * dist_ERR;
+    int constant = Math.abs(GAIN * dist_ERR);
     
-    //int new_LSPD = (GAIN * dist_ERR) + WallFollowingLab.leftMotor.getRotationSpeed();
-    //int new_RSPD = (GAIN * dist_ERR) + WallFollowingLab.rightMotor.getRotationSpeed();
     
-    if (Math.abs(dist_ERR) <= bandWidth ) 
+    if (Math.abs(dist_ERR) <= 2)
     {
-    	WallFollowingLab.leftMotor.setSpeed(185);
-    	WallFollowingLab.rightMotor.setSpeed(185);
+    	WallFollowingLab.leftMotor.setSpeed(200);
+    	WallFollowingLab.rightMotor.setSpeed(200);
     	WallFollowingLab.leftMotor.forward();
     	WallFollowingLab.rightMotor.forward();
     }
     
     else if (dist_ERR > 0)
     {
-    	// turning right
-    	WallFollowingLab.leftMotor.setSpeed(185 + cons);
-    	WallFollowingLab.rightMotor.setSpeed(185 - cons);
-    	WallFollowingLab.leftMotor.forward();
-    	WallFollowingLab.rightMotor.forward();
     	
-    }
-    
-    else
-    {
-    	// turning left
-    	WallFollowingLab.leftMotor.setSpeed(185 + cons);
-    	WallFollowingLab.rightMotor.setSpeed(185 - cons);
-    	WallFollowingLab.leftMotor.forward();
-    	WallFollowingLab.rightMotor.forward();
-    }
-    
-    
-    /*
-    else if (dist_ERR > 0)
-    {
     	if (distance < 7)
     	{
-    		WallFollowingLab.leftMotor.setSpeed(120);
-    		WallFollowingLab.rightMotor.setSpeed(175);
+    		WallFollowingLab.leftMotor.setSpeed(115);
+    		WallFollowingLab.rightMotor.setSpeed(140);
     		WallFollowingLab.leftMotor.backward();
     		WallFollowingLab.rightMotor.backward();
     	}
     	//right turn
     	else 
     	{
-    		WallFollowingLab.leftMotor.setSpeed(240);
-    		WallFollowingLab.rightMotor.setSpeed(20);
+    		WallFollowingLab.leftMotor.setSpeed(210);
+    		WallFollowingLab.rightMotor.setSpeed(210 - constant);
     		WallFollowingLab.leftMotor.forward();
-    		WallFollowingLab.rightMotor.backward();
+    		WallFollowingLab.rightMotor.forward();
     	}
     }
     
     else
     {
     	//left turn
-    	WallFollowingLab.leftMotor.setSpeed(120);
+    	WallFollowingLab.leftMotor.setSpeed(120 - constant);
     	WallFollowingLab.rightMotor.setSpeed(210);
     	WallFollowingLab.leftMotor.forward();
     	WallFollowingLab.rightMotor.forward();
     }
     
     
-    
-    */
   }
 
 
