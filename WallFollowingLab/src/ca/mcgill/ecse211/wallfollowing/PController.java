@@ -2,6 +2,10 @@ package ca.mcgill.ecse211.wallfollowing;
 
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 
+/*** This class implements the P controller for Lab1 on the EV3 platform.
+ * 
+ * @authorAbedAtassi&HyunSuAn
+ */
 public class PController implements UltrasonicController {
 
   /* Constants */
@@ -23,7 +27,12 @@ public class PController implements UltrasonicController {
     WallFollowingLab.leftMotor.forward();
     WallFollowingLab.rightMotor.forward();
   }
-
+  
+  /*** This method starts the p-controller based 
+   * on user button input.
+   * 
+   * @param distance.
+   * */
   @Override
   public void processUSData(int distance) {
 
@@ -47,18 +56,20 @@ public class PController implements UltrasonicController {
       this.distance = distance;
     }
 
-    // TODO: process a movement based on the us distance passed in (P style)
     
+    // Gain constant
     final int GAIN = 10;
+    
+    // When distance is too high, cap it to prevent overflow in diff
     if (distance > 50) {
     	distance = 50;
     } 
     int dist_ERR = 30 - distance;
     
-    int constant = Math.abs(GAIN * dist_ERR);
+    int diff = Math.abs(GAIN * dist_ERR);
     
     
-    
+    // The robot goes forward
     if (Math.abs(dist_ERR) <= 1)
     {
     	WallFollowingLab.leftMotor.setSpeed(200);
@@ -69,7 +80,7 @@ public class PController implements UltrasonicController {
     
     else if (dist_ERR > 0)
     {
-    	
+    	//Goes backwards to the right if distance is less or equal than 7 cm 
     	if (distance <= 7)
     	{
     		WallFollowingLab.leftMotor.setSpeed(115);
@@ -81,7 +92,7 @@ public class PController implements UltrasonicController {
     	else 
     	{
     		WallFollowingLab.leftMotor.setSpeed(270);
-    		WallFollowingLab.rightMotor.setSpeed(120 - constant);
+    		WallFollowingLab.rightMotor.setSpeed(120 - diff);
     		WallFollowingLab.leftMotor.forward();
     		WallFollowingLab.rightMotor.forward();
     	}
@@ -90,7 +101,7 @@ public class PController implements UltrasonicController {
     else if (dist_ERR < 0)
     {
     	//left turn
-    	WallFollowingLab.leftMotor.setSpeed(100 - constant);
+    	WallFollowingLab.leftMotor.setSpeed(100 - diff);
     	WallFollowingLab.rightMotor.setSpeed(150);
     	WallFollowingLab.leftMotor.forward();
     	WallFollowingLab.rightMotor.forward();

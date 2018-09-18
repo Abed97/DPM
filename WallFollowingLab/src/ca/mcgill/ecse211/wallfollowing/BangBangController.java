@@ -13,6 +13,10 @@ import lejos.robotics.RegulatedMotor;
 import lejos.robotics.SampleProvider;
 
 
+/*** This class implements the bang bang controller for Lab1 on the EV3 platform.
+ * 
+ * @authorAbedAtassi&HyunSuAn
+ */
 public class BangBangController implements UltrasonicController {
 
   private final int bandCenter;
@@ -21,6 +25,11 @@ public class BangBangController implements UltrasonicController {
   private final int motorHigh;
   private int distance;
 
+  /*** This method starts the bang bang-controller based 
+   * on user button input.
+   * 
+   * @param bandwidth, bandCenter, motorLow, motorHigh.
+   * */
   public BangBangController(int bandCenter, int bandwidth, int motorLow, int motorHigh) {
     // Default Constructor
     this.bandCenter = bandCenter;
@@ -42,6 +51,7 @@ public class BangBangController implements UltrasonicController {
     
     int dist_ERR = bandCenter - distance;
     
+    // The robot goes forward
     if (Math.abs(dist_ERR) <= bandwidth)
     {
     	WallFollowingLab.leftMotor.setSpeed(200);
@@ -52,7 +62,7 @@ public class BangBangController implements UltrasonicController {
     
     else if (dist_ERR > 0)
     {
-    	
+    	// If the distance is closer than 8 cm the robot goes backward to the right
     	if (distance < 8)
     	{
     		WallFollowingLab.leftMotor.setSpeed(115);
