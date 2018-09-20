@@ -1,8 +1,11 @@
 package ca.mcgill.ecse211.wallfollowing;
 
+import lejos.hardware.Battery;
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
+import lejos.hardware.Audio;
+
 
 public class Printer extends Thread {
 
@@ -26,6 +29,11 @@ public class Printer extends Thread {
     while (true) { // operates continuously
       t.clear();
       t.drawString("Controller Type is... ", 0, 0); // print header
+      t.drawString("Battery: "+ ((Battery.getBatteryCurrent()/2200) * 100) + "%",0 , 3);
+      t.drawString("Current Voltage: "+ Battery.getVoltage(),0 , 4);
+      if (Battery.getVoltage() < 7) {
+    	  LocalEV3.get().getAudio().systemSound(2);
+      }
       if (this.option == Button.ID_LEFT)
         t.drawString("BangBang", 0, 1);
       else if (this.option == Button.ID_RIGHT)
