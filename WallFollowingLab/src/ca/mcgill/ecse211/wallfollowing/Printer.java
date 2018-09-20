@@ -29,7 +29,7 @@ public class Printer extends Thread {
     while (true) { // operates continuously
       t.clear();
       t.drawString("Controller Type is... ", 0, 0); // print header
-      t.drawString("Battery: "+ ((Battery.getBatteryCurrent()/2200) * 100) + "%",0 , 3);
+      t.drawString("Battery: "+ ((Battery.getBatteryCurrent()/2.2) * 100) + "%",0 , 3);
       t.drawString("Current Voltage: "+ Battery.getVoltage(),0 , 4);
       if (Battery.getVoltage() < 7) {
     	  LocalEV3.get().getAudio().systemSound(2);
