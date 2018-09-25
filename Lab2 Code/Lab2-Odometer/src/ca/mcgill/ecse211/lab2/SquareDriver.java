@@ -10,7 +10,7 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
  */
 public class SquareDriver {
   private static final int FORWARD_SPEED = 250;
-  private static final int ROTATE_SPEED = 150;
+  private static final int ROTATE_SPEED = 145;
   private static final double TILE_SIZE = 30.48;
 
   /**
