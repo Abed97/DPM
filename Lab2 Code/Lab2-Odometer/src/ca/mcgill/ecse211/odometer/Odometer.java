@@ -113,7 +113,7 @@ public class Odometer extends OdometerData implements Runnable {
       leftMotorTachoCount = leftMotor.getTachoCount();
       rightMotorTachoCount = rightMotor.getTachoCount();
 
-      // TODO Calculate new robot position based on tachometer counts
+      // Calculating the new robot position based on tachometer counts
       lDist = Math.PI * WHEEL_RAD * (leftMotorTachoCount - previousTachoL)/ 180;
       rDist = Math.PI * WHEEL_RAD * (rightMotorTachoCount - previousTachoR)/ 180;
       previousTachoL = leftMotorTachoCount;
@@ -126,7 +126,7 @@ public class Odometer extends OdometerData implements Runnable {
 	  X = X + dX;
 	  Y = Y + dY;
       
-      // TODO Update odometer values with new calculated values
+      // Updating odometer values with new calculated values
       odo.update(dX, dY, deltaT*180/Math.PI);
 
       // this ensures that the odometer only runs once every period
