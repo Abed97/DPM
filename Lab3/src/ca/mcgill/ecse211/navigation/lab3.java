@@ -16,13 +16,19 @@ import lejos.robotics.SampleProvider;
 public class lab3 {
 
   // Motor Objects, and Robot related parameters
-  private static final EV3LargeRegulatedMotor leftMotor =
+  public static final EV3LargeRegulatedMotor leftMotor =
       new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
-  private static final EV3LargeRegulatedMotor rightMotor =
+  public static final EV3LargeRegulatedMotor rightMotor =
       new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
-  private static final TextLCD lcd = LocalEV3.get().getTextLCD();
+  public static final TextLCD lcd = LocalEV3.get().getTextLCD();
   public static final double WHEEL_RAD = 2.2;
-  public static final double TRACK = 9.8;
+  public static final double TRACK = 9.6;
+
+  public static final int bandCenter = 15; //30; // Offset from the wall (cm)
+  public static final int bandWidth = 1; //1; // Width of dead band (cm)
+  public static final int motorLow = 100; // Speed of slower rotating wheel (deg/sec)
+  public static final int motorHigh = 200; // Speed of the faster rotating wheel (deg/seec)
+
 
   public static void main(String[] args) throws OdometerExceptions {
 

@@ -9,10 +9,18 @@ import lejos.robotics.SampleProvider;
 import ca.mcgill.ecse211.odometer.*;
 import lejos.hardware.Button;
 
+
+import lejos.hardware.motor.NXTRegulatedMotor;
+
+
+
+
+
 public class ObstacleAvoidance implements Runnable {
 
 	private EV3LargeRegulatedMotor leftMotor;
 	private EV3LargeRegulatedMotor rightMotor;
+	private static final NXTRegulatedMotor sensorMotor = new NXTRegulatedMotor(LocalEV3.get().getPort("C"));
 	private static final Port usPort = LocalEV3.get().getPort("S1");
 	private float[] usData;
 	private SampleProvider usDistance ;
@@ -20,6 +28,22 @@ public class ObstacleAvoidance implements Runnable {
 	private final double WHEEL_RAD;
 	public static final int FORWARD_SPEED = 250;
 	private static final int ROTATE_SPEED = 150;
+	
+	//HSA
+	
+	private static final int bandCenter = 30; // Offset from the wall (cm)
+	private static final int bandWidth = 1; //1; // Width of dead band (cm)
+	private static final int motorLow = 100; // Speed of slower rotating wheel (deg/sec)
+	private static final int motorHigh = 200; // Speed of the faster rotating wheel (deg/seec)
+	
+	PController pController = new PController(bandCenter, bandWidth);
+	
+	int runTime = 15000; //runtime in milliseconds
+	
+	
+	
+	
+	
 	double currentT, currentY, currentX;
 	double dx, dy, dt;
 	double distanceToTravel;
@@ -31,6 +55,7 @@ public class ObstacleAvoidance implements Runnable {
 		{2*30.48,2*30.48},
 		{2*30.48,1*30.48},
 		{1*30.48,0*30.48}};
+	private int var;
 		//array list for points
 		public ObstacleAvoidance(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor,
 				final double TRACK, final double WHEEL_RAD) throws OdometerExceptions { // constructor
@@ -41,6 +66,10 @@ public class ObstacleAvoidance implements Runnable {
 			odoData.setXYT(0 , 0 , 0);
 			this.TRACK = TRACK;
 			this.WHEEL_RAD = WHEEL_RAD;
+			sensorMotor.resetTachoCount();
+			var = 60;
+			sensorMotor.setSpeed(80);
+
 			SensorModes usSensor = new EV3UltrasonicSensor(usPort); // usSensor is the instance
 			usDistance = usSensor.getMode("Distance"); // usDistance provides samples from
 			// this instance
@@ -61,6 +90,10 @@ public class ObstacleAvoidance implements Runnable {
 				// there is nothing to be done here because it is not expected that
 				// the odometer will be interrupted by another thread
 			}
+			
+			
+			
+			
 			// implemented this for loop so that navigation will work for any number of points
 			while(iterator < wayPoints.length) { //iterate through all the points 
 				travelTo(wayPoints[iterator][0], wayPoints[iterator][1]);
@@ -69,6 +102,8 @@ public class ObstacleAvoidance implements Runnable {
 		}
 
 		void travelTo(double x, double y) {
+			
+			
 			currentX = odometer.getXYT()[0];// get the position on the board
 			currentY = odometer.getXYT()[1];
 			currentT = odometer.getXYT()[2];
@@ -97,9 +132,84 @@ public class ObstacleAvoidance implements Runnable {
 			leftMotor.rotate(convertDistance(WHEEL_RAD, distanceToTravel), true);
 			rightMotor.rotate(convertDistance(WHEEL_RAD, distanceToTravel), true);
 
+			
+			
 			while(isNavigating()) { //avoiding the obstacles
+				
+				//HSA
+				
+				
+				
+				
+				
+				
+			// rotate sensor
+			
+				/*
+				sensorMotor.rotateTo(20,false);
+				sensorMotor.rotateTo(-20,false);
+				*/
+				
 				usDistance.fetchSample(usData,0);
 				float distance = usData[0]*100;
+				
+				
+				if (distance <= 10)
+				{
+					//leftMotor.stop(true);
+					//rightMotor.stop(false);
+					sensorMotor.rotateTo(var, true);
+					
+					long startTime = System.currentTimeMillis();
+					
+					
+					while (System.currentTimeMillis() - startTime <= runTime)
+					{
+						
+						usDistance.fetchSample(usData,0);
+						distance = usData[0]*100;
+						pController.processUSData((int) distance);
+						
+					}
+					
+					leftMotor.stop(true);
+					rightMotor.stop(false);
+					sensorMotor.rotateTo(var - 40, false);
+					
+					iterator--;
+					
+				}
+				
+					
+					/*
+					if (distance <= 15)
+					{
+						sensorMotor.stop();
+						break;
+					}
+					*/
+				
+				
+				/*
+				if (distance <= 15)
+				{
+					long startTime = System.currentTimeMillis();
+					
+						
+					while (System.currentTimeMillis() - startTime <= runTime)
+					{
+						
+						
+						pController.processUSData((int) distance);
+					
+						
+					}
+				}
+				*/
+				
+				/*
+				//usDistance.fetchSample(usData,0);
+				//float distance = usData[0]*100;
 				if(distance<= 15) {
 					if(odometer.getXYT()[0]<2.4*30.48&&odometer.getXYT()[0]>1.3*30.48&&odometer.getXYT()[1]<2.5*30.48&&odometer.getXYT()[1]>1.6*30.48){
 						leftMotor.rotate(-convertAngle(WHEEL_RAD, TRACK, 90), true);  // turn when facing obstacle and travel a certain distance and then turn again 
@@ -123,6 +233,11 @@ public class ObstacleAvoidance implements Runnable {
 					}
 					iterator--;
 				}
+				
+				*/
+				
+				
+				
 			}
 		}
 
