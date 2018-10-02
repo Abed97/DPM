@@ -37,8 +37,10 @@ public class ObstacleAvoidance implements Runnable {
 	private static final int motorHigh = 200; // Speed of the faster rotating wheel (deg/seec)
 	
 	PController pController = new PController(bandCenter, bandWidth);
+	PController_Clockwise pController_clockwise = new PController_Clockwise(bandCenter, bandWidth);
 	
 	int runTime = 15000; //runtime in milliseconds
+	boolean obstacle_encountered = false;
 	
 	
 	
@@ -50,11 +52,11 @@ public class ObstacleAvoidance implements Runnable {
 	int iterator = 0;
 	private Odometer odometer;
 	private OdometerData odoData;
-	private double[][]  wayPoints = new double[][]{{0*30.48,2*30.48}, // change values for different maps
+	private double[][]  wayPoints = new double[][]{{2*30.48,1*30.48}, // change values for different maps
 		{1*30.48,1*30.48},
-		{2*30.48,2*30.48},
-		{2*30.48,1*30.48},
-		{1*30.48,0*30.48}};
+		{1*30.48,2*30.48},
+		{2*30.48,0*30.48},
+		};
 	private int var;
 		//array list for points
 		public ObstacleAvoidance(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor,
@@ -67,8 +69,8 @@ public class ObstacleAvoidance implements Runnable {
 			this.TRACK = TRACK;
 			this.WHEEL_RAD = WHEEL_RAD;
 			sensorMotor.resetTachoCount();
-			var = 60;
-			sensorMotor.setSpeed(80);
+			var = 50;
+			sensorMotor.setSpeed(30);
 
 			SensorModes usSensor = new EV3UltrasonicSensor(usPort); // usSensor is the instance
 			usDistance = usSensor.getMode("Distance"); // usDistance provides samples from
@@ -154,8 +156,10 @@ public class ObstacleAvoidance implements Runnable {
 				float distance = usData[0]*100;
 				
 				
-				if (distance <= 10)
+				if (distance <= 10 && obstacle_encountered == false)
 				{
+					
+				
 					//leftMotor.stop(true);
 					//rightMotor.stop(false);
 					sensorMotor.rotateTo(var, true);
@@ -174,38 +178,15 @@ public class ObstacleAvoidance implements Runnable {
 					
 					leftMotor.stop(true);
 					rightMotor.stop(false);
-					sensorMotor.rotateTo(var - 40, false);
+					sensorMotor.rotateTo(var - 50, false);
 					
+					obstacle_encountered = true;
 					iterator--;
 					
 				}
 				
-					
-					/*
-					if (distance <= 15)
-					{
-						sensorMotor.stop();
-						break;
-					}
-					*/
 				
 				
-				/*
-				if (distance <= 15)
-				{
-					long startTime = System.currentTimeMillis();
-					
-						
-					while (System.currentTimeMillis() - startTime <= runTime)
-					{
-						
-						
-						pController.processUSData((int) distance);
-					
-						
-					}
-				}
-				*/
 				
 				/*
 				//usDistance.fetchSample(usData,0);

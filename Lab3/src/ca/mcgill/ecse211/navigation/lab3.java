@@ -22,7 +22,7 @@ public class lab3 {
       new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
   public static final TextLCD lcd = LocalEV3.get().getTextLCD();
   public static final double WHEEL_RAD = 2.2;
-  public static final double TRACK = 9.6;
+  public static final double TRACK = 9.8; //9.9;
 
   public static final int bandCenter = 15; //30; // Offset from the wall (cm)
   public static final int bandWidth = 1; //1; // Width of dead band (cm)
