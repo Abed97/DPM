@@ -37,7 +37,6 @@ public class ObstacleAvoidance implements Runnable {
 	private static final int motorHigh = 200; // Speed of the faster rotating wheel (deg/seec)
 	
 	PController pController = new PController(bandCenter, bandWidth);
-	PController_Clockwise pController_clockwise = new PController_Clockwise(bandCenter, bandWidth);
 	
 	int runTime = 15000; //runtime in milliseconds
 	boolean obstacle_encountered = false;
