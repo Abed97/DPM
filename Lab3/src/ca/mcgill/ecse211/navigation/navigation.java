@@ -21,11 +21,11 @@ public class navigation implements Runnable {
 	double distanceToTravel;
 	private Odometer odometer;
 	private OdometerData odoData;
-	private double[][]  wayPoints = new double[][]{{0*30.48,2*30.48}, // change values for different maps
-												  {1*30.48,1*30.48},
-												  {2*30.48,2*30.48},
-												  {2*30.48,1*30.48},
-												  {1*30.48,0*30.48}};
+	private double[][]  wayPoints = new double[][]{{1*30.48,0*30.48}, // change values for different maps
+		{2*30.48,1*30.48},
+		{2*30.48,2*30.48},
+		{0*30.48,2*30.48},
+		{1*30.48,1*30.48}};
 												 //array list for points
 	public navigation(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor,
 		      final double TRACK, final double WHEEL_RAD) throws OdometerExceptions {
